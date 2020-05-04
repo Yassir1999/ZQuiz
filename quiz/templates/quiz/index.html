@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="zquiz, variety quizzes, all kinds of quizzes, arabic quizzes, relevant quizzes, cool website quizzes" >
+    <meta name="author" content="EL MOUHAJIR Yassir" >
+    <meta name="description" content="General knowledge quizzes, fun quizzes, sport quizzes, trivia quizzes, personality quizzes ... We have it all, try out now for free !!" >
+    <meta name="copyright"  content="Copyright EL Mouhajir Yassir, ALL RIGHTS RESERVED">
+    <title>ZQuiz - {{ group }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'Css/main.css' %}?version=5">
+    <script src="{% static 'Js/jquery.js' %}"></script>
+    <style type="text/css">
+        @font-face {
+            font-family: "Yellowtail";
+            src: url("{% static 'Fonts/Yellowtail-Regular.ttf' %}") format("truetype");
+        }
+        </style>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Pacifico&display=swap" rel="stylesheet">
+    {% if colored == 2 %}
+    {% include "quiz/red.html" %}
+    {% elif colored == 1 %}
+    {% include "quiz/blue.html" %}
+    {% elif colored == 3 %}
+    {% include "quiz/green.html" %}
+    {% endif %}
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a>ZQuiz</a>
+        </div>
+        <div class="title">
+            <a>Have Fun</a>
+        </div>
+        <div class="nav">
+     {% if colored == 2 %}
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'new' %}">New</a></li>
+                <li><a href="{% url 'popular' %}" class="current">Popular</a></li>
+                <li><a href="{% url 'categories' %}">Categories</a></li>
+            </ul>
+    {% elif colored == 1 %}
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'new' %}" class="current">New</a></li>
+                <li><a href="{% url 'popular' %}">Popular</a></li>
+                <li><a href="{% url 'categories' %}">Categories</a></li>
+            </ul>
+    {% elif colored == 0 %}
+            <ul>
+                <li><a href="{% url 'index' %}" class="current">Home</a></li>
+                <li><a href="{% url 'new' %}">New</a></li>
+                <li><a href="{% url 'popular' %}">Popular</a></li>
+                <li><a href="{% url 'categories' %}">Categories</a></li>
+            </ul>
+    {% else %}
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'new' %}">New</a></li>
+                <li><a href="{% url 'popular' %}">Popular</a></li>
+                <li><a href="{% url 'categories' %}">Categories</a></li>
+            </ul>
+    {% endif %}
+        </div>
+    </header>
+    <span><hr class="line"></span>
+    <span>
+        <div class="categorie">
+            <a class="categorie-text">{{ group }}</a>
+        </div>
+        <div class="search">
+            <form class="input" method="GET" action="{% url 'search' %}">
+                <input type="text" name="q" value="{{request.GET.q}}" placeholder="Search..">
+                <button type="submit" class="search-text">Search</button>
+            </form>
+
+        </div>
+    </span>
+    <section>
+        <div class="grid-container">
+        {% for i in quizzes %}
+            <div class="grid-item">
+            <div class="quiz">
+                <div class="image">
+                    <img src={{i.quizImagePath}}>
+                </div>
+                <a>{{i.title}}</a><br>
+                <a class="cat">{{i.category.name}}</a>
+                <form method="GET" action="{{ i.get_absolute_url }}">
+                    <button type="submit">Start</button>
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <p class="nothing-found">Nothing was found :(</p>
+        {% endfor %}
+    </div>
+    </section>
+    {% if pageNumber > 0 %}
+    <div class="pages-container">
+    <div class="pages">
+        {% for i in pages %}
+        {% if i != 0 %}
+            {% if pageNumber == i %}
+                {% if colored == 2 %}
+                    <a class="current-page" href="{% url 'popularbypagenumber' pageNumber=i %}">{{ i }}</a>
+                {% elif colored == 1 %}
+                    <a class="current-page" href="{% url 'newbypagenumber' pageNumber=i %}">{{ i }}</a>
+                {% elif colored == 4 %}
+                    <a class="current-page" href="{% url 'allbypagenumber' pageNumber=i %}">{{ i }}</a>
+                {% elif colored == 3 %}
+                    <a class="current-page" href="{% url 'searchbycategorybypagenumber' Category_id=category_id pageNumber=i %}">{{ i }}</a>
+                {% endif %}
+            {% else %}
+                {% if colored == 2 %}
+                    <a href="{% url 'popularbypagenumber' pageNumber=i %}">{{ i }}</a>
+                {% elif colored == 1 %}
+                    <a href="{% url 'newbypagenumber' pageNumber=i %}">{{ i }}</a>
+                {% elif colored == 4 %}
+                    <a href="{% url 'allbypagenumber' pageNumber=i %}">{{ i }}</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {% endfor %}
+    </div>
+    </div>
+    {% endif %}
+    {% if colored == 0 %}
+                    <div id="all-outer">
+                        <a id="all" href="{% url 'quizzes' %}">All</a>
+                    </div>
+        {% endif %}
+    <span><hr class="line2"></span>
+    <footer>
+        <div class="div-copyright">
+            <a class="copyright">COPYRIGHT © 2020. ALL RIGHTS RESERVED</a>
+        </div>
+        <div class="div-socialmedia">
+            <a href=""><img src="{% static 'Icons/whatsapp.svg' %}" width="50px"/></a>
+            <a href="www.linkedin.com/in/elmouhajiryassir" target="_blank"><img src="{% static 'Icons/linkedin.svg' %}" width="50px"/></a>
+            <a href="https://www.facebook.com/profile.php?id=100010281090902" target="_blank"><img src="{% static 'Icons/facebook.svg' %}" width="50px"/></a>
+            <a href="https://twitter.com/Mouhajir_Yassir" target="_blank"><img src="{% static 'Icons/twitter.svg' %}" width="50px"/></a>
+            <a href="https://www.instagram.com/yassirelmouhajir/" target="_blank"><img src="{% static 'Icons/instagram.svg' %}" width="50px"/></a>
+        </div>
+    </footer>
+    <script type="text/javascript" src="{% static 'Js/main.js' %}"></script>
+</body>
+</html>

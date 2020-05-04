@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="zquiz, variety quizzes, all kinds of quizzes, arabic quizzes, relevant quizzes, cool website quizzes" >
+    <meta name="author" content="EL MOUHAJIR Yassir" >
+    <meta name="description" content="{{ quiz.description }}" >
+    <meta name="copyright"  content="Copyright EL Mouhajir Yassir, ALL RIGHTS RESERVED">
+    <title>{{quiz.title}}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'Css/quiz.css' %}?version=21">
+    <script src="{% static 'Js/jquery.js' %}"></script>
+    <style type="text/css">
+        @font-face {
+            font-family: "Yellowtail";
+            src: url("{% static 'Fonts/Yellowtail-Regular.ttf' %}") format("truetype");
+        }
+        </style>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a>ZQuiz</a>
+        </div>
+        <div class="title">
+            <a>Have Fun</a>
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'new' %}">New</a></li>
+                <li><a href="{% url 'popular' %}">Popular</a></li>
+                <li><a href="{% url 'categories' %}">Categories</a></li>
+            </ul>
+        </div>
+    </header>
+    <span><hr class="line"></span>
+    <span>
+        <div class="categorie">
+            <a class="categorie-text">{{quiz.title}}</a>
+        </div>
+        <div class="search">
+            <form class="input">
+                <input type="text" placeholder="Search..">
+                <button type="submit" class="search-text">Search</button>
+            </form>
+        </div>
+    </span>
+    <section>
+        <a id="number-of-questions">{{ length }}</a>
+        <a id="isTest">{{ quiz.isTest }}</a>
+        <div id="result-options">
+            {% if quiz.isTest == 0 %}
+            <a id="result1">{{ quiz.result1 }}</a>
+            <a id="result2">{{ quiz.result2 }}</a>
+            <a id="result3">{{ quiz.result3 }}</a>
+            <a id="result4">{{ quiz.result4 }}</a>
+            <a id="result5">{{ quiz.result5 }}</a>
+            <a id="result6">{{ quiz.result6 }}</a>
+            <a id="result7">{{ quiz.result7 }}</a>
+            <a id="result8">{{ quiz.result8 }}</a>
+            <a id="result9">{{ quiz.result9 }}</a>
+            <a id="result1img">{{ quiz.result1img }}</a>
+            <a id="result2img">{{ quiz.result2img }}</a>
+            <a id="result3img">{{ quiz.result3img }}</a>
+            <a id="result4img">{{ quiz.result4img }}</a>
+            <a id="result5img">{{ quiz.result5img }}</a>
+            <a id="result6img">{{ quiz.result6img }}</a>
+            <a id="result7img">{{ quiz.result7img }}</a>
+            <a id="result8img">{{ quiz.result8img }}</a>
+            <a id="result9img">{{ quiz.result9img }}</a>
+            {% endif %}
+        </div>
+        <span class="main-question">
+            <a class="main-question-a">{{quiz.mainQuestion}}</a>
+        </span>
+        <span class="description">
+            <p>{{quiz.description}}</p>
+        </span>
+        <div id="reveal" class="grid-container">
+            {% for i in questions %}
+            <hr>
+            <div class="grid-item">
+                <div>
+                    <div class="question">
+                    {{i.question}}
+                    </div>
+                    <form method="POST">
+                        <button type="button" class="{{ i.id }}" id="button-{{ i.id }}-{{ i.option1 }}" onclick="select('{{ i.id }}','{{ i.questionWorth }}','{{ i.option1 }}','{{ i.option1Worth }}')">{{i.option1}}</button>
+                        {% if i.option1img != "" %}
+                        <style>
+                            form #button-{{ i.id }}-{{ i.option1 }} {
+                            background: url("{{ i.option1img }}") center no-repeat;
+                            background-size: cover;
+                            filter: brightness(0.5);
+                            }
+                        </style>
+                        {% endif %}
+                        <button type="button" class="{{ i.id }}" id="button-{{ i.id }}-{{ i.option2 }}" onclick="select('{{ i.id }}','{{ i.questionWorth }}','{{ i.option2 }}','{{ i.option2Worth }}')">{{i.option2}}</button><br>
+                        {% if i.option2img != "" %}
+                        <style>
+                        .grid-item #button-{{ i.id }}-{{ i.option2 }} {
+                            background: url("{{ i.option2img }}") center no-repeat;
+                            background-size: cover;
+                            filter: brightness(0.5);
+                            }
+                            </style>
+                        {% endif %}
+                        {% if i.option3 != "" %}
+                        <button type="button" class="{{ i.id }}" id="button-{{ i.id }}-{{ i.option3 }}" onclick="select('{{ i.id }}','{{ i.questionWorth }}','{{ i.option3 }}','{{ i.option3Worth }}')">{{i.option3}}</button>
+                        {% if i.option3img != "" %}
+                        <style>
+                        .grid-item #button-{{ i.id }}-{{ i.option3 }} {
+                            background: url("{{ i.option3img }}") center no-repeat;
+                            background-size: cover;
+                            filter: brightness(0.5);
+                            }
+                            </style>
+                        {% endif %}
+                        {% endif %}
+                        {% if i.option4 != "" %}
+                        <button type="button" class="{{ i.id }}" id="button-{{ i.id }}-{{ i.option4 }}" onclick="select( '{{ i.id }}','{{ i.questionWorth }}','{{ i.option4 }}','{{ i.option4Worth }}' )">{{i.option4}}</button><br>
+                        {% if i.option4img != "" %}
+                        <style>
+                        .grid-item #button-{{ i.id }}-{{ i.option4 }} {
+                            background: url("{{ i.option4img }}") center no-repeat;
+                            background-size: cover;
+                            filter: brightness(0.5);
+                            }
+                            </style>
+                        {% endif %}
+                        {% endif %}
+                        {% if i.option5 != "" %}
+                        <button type="button" class="{{ i.id }}" id="button-{{ i.id }}-{{ i.option5 }}" onclick="select(' {{ i.id }} ','{{ i.questionWorth }}', ' {{ i.option5 }}','{{ i.option5Worth }}' )">{{i.option5}}</button>
+                        {% if i.option5img != "" %}
+                        <style>
+                        .grid-item #button-{{ i.id }}-{{ i.option5 }} {
+                            background: url("{{ i.option5img }}") center no-repeat;
+                            background-size: cover;
+                            filter: brightness(0.5);
+                            }
+                            </style>
+                        {% endif %}
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+            <hr>
+        {% empty %}
+        <p class="not-ready">This quiz is still under developement !</p>
+            {% endfor %}
+        </div>
+        {% if length > 0 %}
+        <div class="submit">
+            <hr>
+            <a href="#result-result">
+                <button id="submit-button" type="button" onclick="getResults()">
+                Submit
+            </button>
+            </a>
+            <hr>
+        </div>
+        {% endif %}
+        <div id="result">
+            <div class="result-text">
+                Results
+            </div>
+            <hr class="result-hr">
+            <div id="result-result">
+                You got : <br>
+                {% if quiz.isTest == 0 %}
+                     <div class="root">
+                         {% if quiz.result1img != "" %}
+                <img src="{{ quiz.result1img }}" id="img1">
+                {% endif %}
+            {% if quiz.result2img != "" %}
+                <img src="{{ quiz.result2img }}" id="img2">
+                {% endif %}
+            {% if quiz.result3img != "" %}
+                <img src="{{ quiz.result3img }}" id="img3">
+                {% endif %}
+            {% if quiz.result4img != "" %}
+                <img src="{{ quiz.result4img }}" id="img4">
+                {% endif %}
+            {% if quiz.result5img != "" %}
+                <img src="{{ quiz.result5img }}" id="img5">
+                {% endif %}
+            {% if quiz.result6img != "" %}
+                <img src="{{ quiz.result6img }}" id="img6">
+                {% endif %}
+            {% if quiz.result7img != "" %}
+                <img src="{{ quiz.result7img }}" id="img7">
+                {% endif %}
+            {% if quiz.result8img != "" %}
+                <img src="{{ quiz.result8img }}" id="img8">
+                {% endif %}
+            {% if quiz.result9img != "" %}
+                <img src="{{ quiz.result9img }}" id="img9">
+                {% endif %}
+                     </div>
+                {% else %}
+                <img class="bm" src="{% static 'images/brainmeme1.png' %}" id="bm1" >
+                <img class="bm" src="{% static 'images/brainmeme2.png' %}" id="bm2" >
+                <img class="bm" src="{% static 'images/brainmeme3.png' %}" id="bm3" >
+                <img class="bm" src="{% static 'images/brainmeme4.png' %}" id="bm4" >
+                <img class="bm" src="{% static 'images/brainmeme5.png' %}" id="bm5" >
+                <img class="bm" src="{% static 'images/brainmeme6.png' %}" id="bm6" >
+                {% endif %}
+                <br>
+                <a id="result-answer"></a>
+            </div>
+            <hr class="result-hr">
+            {% if quiz.isTest == 1 %}
+            <a href="#reveal">
+                <button id="revealanswers" type="button" onclick="revealanswers()">
+                Reveal answers
+            </button>
+            </a>
+            {% endif %}
+            <a>
+                <button id="share-facebook" type="button" onclick="sharetofacebook()">
+                Share to facebook
+            </button>
+            </a>
+        </div>
+        <hr class="last-hr">
+        <div class="suggested">
+
+        </div>
+    </section>
+    <span><hr class="line2"></span>
+    <footer>
+        <div class="div-copyright">
+            <a class="copyright">COPYRIGHT © 2020. ALL RIGHTS RESERVED</a>
+        </div>
+        <div class="div-socialmedia">
+            <a href=""><img src="{% static 'Icons/whatsapp.svg' %}" width="50px"/></a>
+            <a href="www.linkedin.com/in/elmouhajiryassir" target="_blank"><img src="{% static 'Icons/linkedin.svg' %}" width="50px"/></a>
+            <a href="https://www.facebook.com/profile.php?id=100010281090902" target="_blank"><img src="{% static 'Icons/facebook.svg' %}" width="50px"/></a>
+            <a href="https://twitter.com/Mouhajir_Yassir" target="_blank"><img src="{% static 'Icons/twitter.svg' %}" width="50px"/></a>
+            <a href="https://www.instagram.com/yassirelmouhajir/" target="_blank"><img src="{% static 'Icons/instagram.svg' %}" width="50px"/></a>
+        </div>
+    </footer>
+    <script type="text/javascript" src="{% static 'Js/quiz.js' %}?version=34"></script>
+</body>
+</html>
